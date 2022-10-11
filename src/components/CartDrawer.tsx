@@ -9,7 +9,13 @@ interface ICartProps {
 }
 
 const CartDrawer: React.FC<ICartProps> = ({onCloseCart, items, onRemove}) => {
-
+    const totalSum = () => {
+        let sum = 0
+        items.map(item => {
+            sum += item.price
+        })
+        return sum
+    }
     return (
         <div className="overlay"
              onClick={(event: any) => event.target.className !== 'overlay' ? null : onCloseCart()}>
@@ -41,12 +47,12 @@ const CartDrawer: React.FC<ICartProps> = ({onCloseCart, items, onRemove}) => {
                                     <li>
                                         <span>Всього: </span>
                                         <div></div>
-                                        <b>21 438 грн.</b>
+                                        <b>{(totalSum() + (totalSum() * 0.05)).toLocaleString('ua')} грн.</b>
                                     </li>
                                     <li>
                                         <span>Податок 5%: </span>
                                         <div></div>
-                                        <b>1333 грн.</b>
+                                        <b>{(totalSum() * 0.05).toLocaleString('ua')} грн.</b>
                                     </li>
                                 </ul>
                                 <button className="greenButton">
