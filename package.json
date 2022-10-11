@@ -50,6 +50,7 @@
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
     "@types/react-transition-group": "^4.4.5",
-    "@types/uuid": "^8.3.4"
+    "@types/uuid": "^8.3.4",
+    "gh-pages": "^4.0.0"
   }
 }
