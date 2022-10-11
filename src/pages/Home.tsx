@@ -1,6 +1,8 @@
 import Card from '../components/Card/Card'
 import {IShopItem} from '../App'
 import React from 'react'
+import {v4 as uuidv4} from 'uuid'
+import {faker} from '@faker-js/faker'
 
 interface IPropsHome {
     items: IShopItem[]
@@ -9,11 +11,15 @@ interface IPropsHome {
     onChangeSearchInput: (event: React.ChangeEvent<HTMLInputElement>) => void
     onAddToFavorite: (obj: IShopItem) => void
     onAddToCart: (obj: IShopItem) => void
+    cartItems: IShopItem[]
+    isLoading: boolean
 }
 
 const Home: React.FC<IPropsHome> = (
     {
         items,
+        isLoading,
+        cartItems,
         searchValue,
         setSearchValue,
         onChangeSearchInput,
@@ -21,6 +27,38 @@ const Home: React.FC<IPropsHome> = (
         onAddToCart
     }) => {
 
+    const createThisFuckingFakeArrayWithFakeObj = (itemsLength: number = 10) => {
+        const ITEMS: IShopItem[] = []
+        function createRandomObject() {
+            return {
+                id: faker.datatype.uuid(),
+                name: faker.commerce.productName(),
+                image: faker.image.imageUrl(),
+                price: Number(faker.finance.amount())
+            }
+        }
+        Array.from({length: 10}).forEach(() => {
+            ITEMS.push(createRandomObject())
+        })
+        return ITEMS
+    }
+    const renderItems = () => {
+        console.log(createThisFuckingFakeArrayWithFakeObj())
+        const filtredItems = items.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase()))
+        return ((isLoading ? createThisFuckingFakeArrayWithFakeObj() : filtredItems).map((item) => {
+            return (<Card key={item.id}
+                          id={item.id}
+                          name={item.name}
+                          price={item.price}
+                          image={item.image}
+                          onPlus={onAddToCart}
+                          onFavorite={onAddToFavorite}
+                          added={cartItems.some(obj => Number(obj.id) === Number(item.id))}
+                          loading={isLoading}
+            />)
+        }))
+    }
     return (
         <div className="content p-40">
 
@@ -43,18 +81,7 @@ const Home: React.FC<IPropsHome> = (
             </div>
 
             <div className="d-flex flex-wrap">
-                {items
-                    .filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
-                    .map((item) => {
-                        return (<Card key={item.id}
-                                      id={item.id}
-                                      name={item.name}
-                                      price={item.price}
-                                      image={item.image}
-                                      onPlus={onAddToCart}
-                                      onFavorite={onAddToFavorite}
-                        />)
-                    })}
+                {renderItems()}
             </div>
 
         </div>

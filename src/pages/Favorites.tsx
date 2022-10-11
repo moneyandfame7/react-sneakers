@@ -1,7 +1,6 @@
 import React from 'react'
 import Card from '../components/Card/Card'
 import {IShopItem} from '../App'
-import {v4 as uuidv4} from 'uuid'
 
 interface IPropsFavorites {
     items: IShopItem[]
